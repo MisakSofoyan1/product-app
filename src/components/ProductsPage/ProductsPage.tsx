@@ -14,6 +14,7 @@ import MobileFilter from "../MobileFilter/Mobilefilter";
 import ProductsLoader from "../ProductsLoader/ProductsLoader";
 import EmptyState from "../EmptyState/EmptyState";
 import ProductCard from "../ProductCard/ProductCard";
+import Pagination from "../Pagination/Pagination";
 
 import "./ProductsPage.scss";
 
@@ -25,13 +26,15 @@ const ProductsPage: React.FC = () => {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [activeFilters, setActiveFilters] = useState<IActiveFilters>({
-    categories: [],
-    brands: [],
+    category: null,
+    brand: null,
     minPrice: null,
     maxPrice: null,
     minRating: null,
     maxRating: null,
   });
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
 
   useEffect(() => {
     const fetchFilters = async () => {
@@ -45,16 +48,39 @@ const ProductsPage: React.FC = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const data = await getProducts({});
+      setIsProductsLoading(true);
+
+      const data = await getProducts({
+        page,
+        limit,
+        category: activeFilters.category,
+        brand: activeFilters.brand,
+        minPrice: activeFilters.minPrice,
+        maxPrice: activeFilters.maxPrice,
+        minRating: activeFilters.minRating,
+        maxRating: activeFilters.maxRating,
+      });
+
       if (data) {
         setPagination(data.pagination);
         setProducts(data.data);
-        setIsProductsLoading(false);
       }
+
+      setIsProductsLoading(false);
     };
 
     fetchProducts();
-  }, []);
+  }, [activeFilters, page, limit]);
+
+  const handleLimitChange = (newLimit: number) => {
+    setLimit(newLimit);
+    setPage(1);
+  };
+
+  const handleActiveFiltersChange = (newFilters: IActiveFilters) => {
+    setActiveFilters(newFilters);
+    setPage(1);
+  };
 
   return (
     <div className="products-page">
@@ -76,7 +102,7 @@ const ProductsPage: React.FC = () => {
             <MobileFilter
               filters={filters}
               activeFilters={activeFilters}
-              setActiveFilters={setActiveFilters}
+              onActiveFiltersChange={handleActiveFiltersChange}
               isLoading={isFiltersLoading}
               open={isMobileFilterOpen}
               onOpenChange={setIsMobileFilterOpen}
@@ -92,7 +118,7 @@ const ProductsPage: React.FC = () => {
               <FiltersPanel
                 filters={filters}
                 activeFilters={activeFilters}
-                setActiveFilters={setActiveFilters}
+                onActiveFiltersChange={handleActiveFiltersChange}
                 isLoading={isFiltersLoading}
                 className="filter-drawer__content"
               />
@@ -106,13 +132,14 @@ const ProductsPage: React.FC = () => {
               <EmptyState
                 onClearFilters={() => {
                   setActiveFilters({
-                    categories: [],
-                    brands: [],
+                    category: null,
+                    brand: null,
                     minPrice: null,
                     maxPrice: null,
                     minRating: null,
                     maxRating: null,
                   });
+                  setPage(1);
                 }}
               />
             )}
@@ -137,6 +164,13 @@ const ProductsPage: React.FC = () => {
                     </div>
                   ))}
                 </div>
+                {pagination && (
+                  <Pagination
+                    pagination={pagination}
+                    onPageChange={setPage}
+                    onLimitChange={handleLimitChange}
+                  />
+                )}
               </div>
             )}
           </div>

@@ -1,13 +1,14 @@
 import apiClient from "./apiClient";
 
-export interface IProductsQuery {
+export interface IProductsParams {
   page?: number;
   limit?: number;
-  category?: string;
-  brand?: string;
-  minPrice?: number;
-  maxPrice?: number;
-  minRating?: number;
+  category: string | null;
+  brand: string | null;
+  minPrice: number | null;
+  maxPrice: number | null;
+  minRating: number | null;
+  maxRating: number | null;
 }
 
 export interface IProduct {
@@ -50,7 +51,7 @@ export interface IFilters {
 }
 
 export const getProducts = async (
-  params: IProductsQuery,
+  params: IProductsParams,
 ): Promise<IProductsResponse | null> => {
   try {
     const response = await apiClient.get("/products", { params });

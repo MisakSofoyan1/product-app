@@ -7,8 +7,8 @@ import CustomCheckbox from "../CustomCheckbox/CustomCheckbox";
 import CustomSlider from "../CustomSlider/CustomSlider";
 
 export interface IActiveFilters {
-  categories: string[];
-  brands: string[];
+  category: string | null;
+  brand: string | null;
   minPrice: number | null;
   maxPrice: number | null;
   minRating: number | null;
@@ -18,7 +18,7 @@ export interface IActiveFilters {
 interface FiltersPanelProps {
   filters: IFilters;
   activeFilters: IActiveFilters;
-  setActiveFilters: React.Dispatch<React.SetStateAction<IActiveFilters>>;
+  onActiveFiltersChange: (newFilters: IActiveFilters) => void;
   isLoading: boolean;
   className?: string;
 }
@@ -26,7 +26,7 @@ interface FiltersPanelProps {
 const FiltersPanel: React.FC<FiltersPanelProps> = ({
   filters,
   activeFilters,
-  setActiveFilters,
+  onActiveFiltersChange,
   isLoading,
   className,
 }) => {
@@ -38,8 +38,8 @@ const FiltersPanel: React.FC<FiltersPanelProps> = ({
   ]);
 
   const hasActiveFilters =
-    activeFilters.categories.length > 0 ||
-    activeFilters.brands.length > 0 ||
+    activeFilters.category !== null ||
+    activeFilters.brand !== null ||
     activeFilters.minPrice !== null ||
     activeFilters.maxPrice !== null ||
     activeFilters.minRating !== null ||
@@ -67,25 +67,26 @@ const FiltersPanel: React.FC<FiltersPanelProps> = ({
     activeFilters.maxRating,
   ]);
 
-  const handleToggle = (key: "categories" | "brands", value: string) => {
-    setActiveFilters((prev) => {
-      if (!value) {
-        return {
-          ...prev,
-          [key]: [],
-        };
+  const handleToggle = (key: "category" | "brand", value: string) => {
+    const newFilters = { ...activeFilters };
+
+    if (value === "") {
+      if (key === "category") newFilters.category = null;
+      else newFilters.brand = null;
+    } else {
+      const currentValue =
+        key === "category" ? activeFilters.category : activeFilters.brand;
+
+      if (currentValue === value) {
+        if (key === "category") newFilters.category = null;
+        else newFilters.brand = null;
+      } else {
+        if (key === "category") newFilters.category = value;
+        else newFilters.brand = value;
       }
+    }
 
-      const currentList = prev[key];
-      const newList = currentList.includes(value)
-        ? currentList.filter((item) => item !== value)
-        : [...currentList, value];
-
-      return {
-        ...prev,
-        [key]: newList,
-      };
-    });
+    onActiveFiltersChange(newFilters);
   };
 
   const handlePriceChange = (value: [number, number]) => {
@@ -98,7 +99,7 @@ const FiltersPanel: React.FC<FiltersPanelProps> = ({
     const minChanged = localPriceRange[0] !== filters?.priceRange?.min;
     const maxChanged = localPriceRange[1] !== filters?.priceRange?.max;
 
-    setActiveFilters({
+    onActiveFiltersChange({
       ...activeFilters,
       minPrice: minChanged ? localPriceRange[0] : null,
       maxPrice: maxChanged ? localPriceRange[1] : null,
@@ -115,7 +116,7 @@ const FiltersPanel: React.FC<FiltersPanelProps> = ({
     const minChanged = localRatingRange[0] !== filters?.ratingRange?.min;
     const maxChanged = localRatingRange[1] !== filters?.ratingRange?.max;
 
-    setActiveFilters({
+    onActiveFiltersChange({
       ...activeFilters,
       minRating: minChanged ? localRatingRange[0] : null,
       maxRating: maxChanged ? localRatingRange[1] : null,
@@ -123,9 +124,9 @@ const FiltersPanel: React.FC<FiltersPanelProps> = ({
   };
 
   const clearFilter = () => {
-    setActiveFilters({
-      categories: [],
-      brands: [],
+    onActiveFiltersChange({
+      category: null,
+      brand: null,
       minPrice: null,
       maxPrice: null,
       minRating: null,
@@ -164,16 +165,16 @@ const FiltersPanel: React.FC<FiltersPanelProps> = ({
           <div className="filters-panel__checkbox-group">
             <CustomCheckbox
               id="category-all"
-              checked={activeFilters.categories.length === 0}
-              onChange={() => handleToggle("categories", "")}
+              checked={!activeFilters.category}
+              onChange={() => handleToggle("category", "")}
               label="All Categories"
             />
             {filters.categories.map((category) => (
               <CustomCheckbox
                 key={category}
                 id={`category-${category}`}
-                checked={activeFilters.categories.includes(category)}
-                onChange={() => handleToggle("categories", category)}
+                checked={activeFilters.category === category}
+                onChange={() => handleToggle("category", category)}
                 label={category}
               />
             ))}
@@ -187,16 +188,16 @@ const FiltersPanel: React.FC<FiltersPanelProps> = ({
           <div className="filters-panel__checkbox-group">
             <CustomCheckbox
               id="brand-all"
-              checked={activeFilters.brands.length === 0}
-              onChange={() => handleToggle("brands", "")}
+              checked={!activeFilters.brand}
+              onChange={() => handleToggle("brand", "")}
               label="All Brands"
             />
             {filters.brands.map((brand) => (
               <CustomCheckbox
                 key={brand}
                 id={`brand-${brand}`}
-                checked={activeFilters.brands.includes(brand)}
-                onChange={() => handleToggle("brands", brand)}
+                checked={activeFilters.brand === brand}
+                onChange={() => handleToggle("brand", brand)}
                 label={brand}
               />
             ))}
@@ -237,11 +238,11 @@ const FiltersPanel: React.FC<FiltersPanelProps> = ({
         <div className="filters-panel__active">
           <span className="filters-panel__active-label">Active Filters</span>
           <div className="filters-panel__active-tags">
-            {activeFilters.categories.map((category) => (
-              <span key={category} className="filters-panel__tag">
-                {category}
+            {activeFilters.category && (
+              <span key={activeFilters.category} className="filters-panel__tag">
+                {activeFilters.category}
                 <button
-                  onClick={() => handleToggle("categories", category)}
+                  onClick={() => handleToggle("category", "")}
                   className="filters-panel__tag-remove"
                 >
                   <span className="filters-panel__tag-remove-icon">
@@ -249,12 +250,12 @@ const FiltersPanel: React.FC<FiltersPanelProps> = ({
                   </span>
                 </button>
               </span>
-            ))}
-            {activeFilters.brands.map((brand) => (
-              <span key={brand} className="filters-panel__tag">
-                {brand}
+            )}
+            {activeFilters.brand && (
+              <span key={activeFilters.brand} className="filters-panel__tag">
+                {activeFilters.brand}
                 <button
-                  onClick={() => handleToggle("brands", brand)}
+                  onClick={() => handleToggle("brand", "")}
                   className="filters-panel__tag-remove"
                 >
                   <span className="filters-panel__tag-remove-icon">
@@ -262,7 +263,7 @@ const FiltersPanel: React.FC<FiltersPanelProps> = ({
                   </span>
                 </button>
               </span>
-            ))}
+            )}
             {(activeFilters.minPrice !== null ||
               activeFilters.maxPrice !== null) && (
               <span className="filters-panel__tag">
@@ -274,7 +275,7 @@ const FiltersPanel: React.FC<FiltersPanelProps> = ({
                 $
                 <button
                   onClick={() =>
-                    setActiveFilters({
+                    onActiveFiltersChange({
                       ...activeFilters,
                       minPrice: null,
                       maxPrice: null,
@@ -299,7 +300,7 @@ const FiltersPanel: React.FC<FiltersPanelProps> = ({
                 ★
                 <button
                   onClick={() =>
-                    setActiveFilters({
+                    onActiveFiltersChange({
                       ...activeFilters,
                       minRating: null,
                       maxRating: null,

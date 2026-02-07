@@ -9,7 +9,7 @@ import "./MobileFilter.scss";
 interface MobileFilterProps {
   filters: IFilters;
   activeFilters: IActiveFilters;
-  setActiveFilters: React.Dispatch<React.SetStateAction<IActiveFilters>>;
+  onActiveFiltersChange: (newFilter: IActiveFilters) => void;
   isLoading: boolean;
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -18,14 +18,14 @@ interface MobileFilterProps {
 const MobileFilter: React.FC<MobileFilterProps> = ({
   filters,
   activeFilters,
-  setActiveFilters,
+  onActiveFiltersChange,
   isLoading,
   open,
   onOpenChange,
 }) => {
   const activeCount = [
-    ...activeFilters.categories,
-    ...activeFilters.brands,
+    activeFilters.category,
+    activeFilters.brand,
     activeFilters.minPrice,
     activeFilters.maxPrice,
     activeFilters.minRating,
@@ -82,7 +82,7 @@ const MobileFilter: React.FC<MobileFilterProps> = ({
             <FiltersPanel
               filters={filters}
               activeFilters={activeFilters}
-              setActiveFilters={setActiveFilters}
+              onActiveFiltersChange={onActiveFiltersChange}
               isLoading={isLoading}
               className="filter-drawer__content"
             />

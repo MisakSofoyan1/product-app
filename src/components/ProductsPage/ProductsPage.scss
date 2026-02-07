@@ -6,7 +6,8 @@
 }
 
 .products-page__header {
-  position: sticky;
+  position: fixed;
+  width: 100%;
   top: 0;
   z-index: 40;
   background-color: #f9fafbf2;
@@ -57,8 +58,8 @@
 
 .products-page__main {
   max-width: 1400px;
-  margin: 0 auto;
-  padding: 1.5rem 1rem;
+  margin: 100px auto 0 auto;
+  padding: 0 1rem 1.5rem 1rem;
 }
 
 .products-page__layout {

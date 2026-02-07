@@ -1,0 +1,130 @@
+@use "../../styles/variables.scss" as v;
+
+.pagination {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid #d6d6d6;
+  margin-top: 2rem;
+}
+
+@media (min-width: v.$bp-mobile) {
+  .pagination {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.pagination__info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pagination__text {
+  font-size: 0.875rem;
+  color: #7a7f87;
+  margin: 0;
+}
+
+.pagination__text-highlight {
+  font-weight: 600;
+  color: #1c1c1c;
+}
+
+.pagination__limit {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pagination__limit-label {
+  font-size: 0.875rem;
+  color: #7a7f87;
+}
+
+.pagination__select-wrapper {
+  position: relative;
+  display: inline-block;
+
+  .pagination__select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 2rem;
+  }
+
+  .pagination__select-icon {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    width: 1rem;
+    height: 1rem;
+    color: #6b7280;
+  }
+}
+
+.pagination__select:hover {
+  border-color: #1fa39a;
+}
+
+.pagination__select:focus {
+  outline: none;
+  border-color: #1fa39a;
+  box-shadow: 0 0 0 2px #d7f3f0;
+}
+
+.pagination__nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.pagination__pages {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.pagination__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.25rem;
+  height: 2.25rem;
+  padding: 0 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1c1c1c;
+  background: #ffffff;
+  border: 1px solid #d6d6d6;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pagination__btn:hover:not(:disabled) {
+  border-color: #1fa39a;
+  background: #e6f7f5;
+}
+
+.pagination__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination__btn--active {
+  background: #1fa39a;
+  border-color: #1fa39a;
+  color: #ffffff;
+}
+
+.pagination__btn--active:hover:not(:disabled) {
+  background: #178f87;
+  border-color: #178f87;
+}
