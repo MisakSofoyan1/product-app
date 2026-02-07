@@ -10,7 +10,6 @@
   top: 0;
   z-index: 40;
   background-color: #f9fafbf2;
-  backdrop-filter: blur(8px);
   border-bottom: 1px solid #dae0e7;
 }
 
@@ -54,4 +53,75 @@
   font-size: 0.875rem;
   color: #6c7c93;
   margin: 0;
+}
+
+.products-page__main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+
+.products-page__layout {
+  display: flex;
+  gap: 2rem;
+}
+
+.products-page__sidebar {
+  display: none;
+  flex-shrink: 0;
+}
+
+@media (min-width: v.$bp-tablet) {
+  .products-page__sidebar {
+    display: block;
+  }
+}
+
+.products-page__sidebar-content {
+  position: sticky;
+  top: 6rem;
+  background-color: #ffffff;
+  border: 1px solid #e7eaef;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px #1317200d;
+}
+
+.products-page__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.products-page__grid-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.products-page__grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(3, 1fr);
+  
+  @media (max-width: v.$bp-tablet) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: v.$bp-mobile) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.products-page__product-wrapper {
+  animation: fadeIn 0.3s ease-out both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
