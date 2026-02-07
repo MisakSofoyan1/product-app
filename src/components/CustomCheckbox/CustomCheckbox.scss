@@ -1,0 +1,38 @@
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+
+  &:hover {
+    .checkbox {
+      border-color: #1b988d;
+    }
+  }
+  .checkbox {
+    width: 1.125rem;
+    height: 1.125rem;
+    border: 2px solid hsl(215, 15%, 70%);
+    border-radius: 0.25rem;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    padding: 0;
+    flex-shrink: 0;
+
+    &.checked {
+      background-color: #1b988d;
+      border-color: #1b988d;
+    }
+
+  }
+
+  .checkbox-label {
+    font-size: 0.875rem;
+    color: #6c7c93;
+    cursor: pointer;
+  }
+}

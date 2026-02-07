@@ -1,0 +1,11 @@
+body {
+  background-color: #f9fafb;
+  color: #f9fafb;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+
+  #root {
+    height: 100vh;
+  }
+}

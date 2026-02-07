@@ -1,29 +1,12 @@
-import { getFilters, getProducts, type IProductsQuery } from './api/productsApi';
-import './App.css'
+import "./App.css";
+import FiltersPanel from "./components/FiltersPanel/FiltersPanel";
 
 function App() {
-
-  const handleGetProducts = async () => {
-    const params: IProductsQuery = { page: 1, limit: 25, minPrice: 150 };
-    const res = await getProducts(params);
-    console.log("Products:", res);
-  };
-
-  const handleGetFilters = async () => {
-    const filters = await getFilters();
-    console.log("Filters:", filters);
-  };
-
   return (
     <>
-      <button onClick={handleGetProducts}>
-        Get Products
-      </button>
-      <button onClick={handleGetFilters}>
-        Get Filters
-      </button>
+      <FiltersPanel />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

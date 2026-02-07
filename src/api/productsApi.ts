@@ -41,10 +41,10 @@ export interface IRatingRange {
 }
 
 export interface IFilters {
-  categories: string[];
-  brands: string[];
-  priceRange: IPriceRange;
-  ratingRange: IRatingRange;
+  categories?: string[];
+  brands?: string[];
+  priceRange?: IPriceRange;
+  ratingRange?: IRatingRange;
 }
 
 export const getProducts = async (params: IProductsQuery): Promise<IProduct[] | null> => {
