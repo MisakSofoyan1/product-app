@@ -10,7 +10,7 @@ export interface IProductsQuery {
   minRating?: number;
 }
 
-interface IProduct {
+export interface IProduct {
   id: number;
   name: string;
   category: string;
@@ -20,14 +20,16 @@ interface IProduct {
   imageUrl: string;
 }
 
+export interface IPagination {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
 export interface IProductsResponse {
   data: IProduct[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
+  pagination: IPagination;
 }
 
 export interface IPriceRange {
@@ -47,9 +49,11 @@ export interface IFilters {
   ratingRange?: IRatingRange;
 }
 
-export const getProducts = async (params: IProductsQuery): Promise<IProduct[] | null> => {
-  try{
-    const response = await apiClient.get('/products', { params });
+export const getProducts = async (
+  params: IProductsQuery,
+): Promise<IProductsResponse | null> => {
+  try {
+    const response = await apiClient.get("/products", { params });
     return response.data;
   } catch (e) {
     console.error("Error fetching products: ", e);
@@ -59,10 +63,10 @@ export const getProducts = async (params: IProductsQuery): Promise<IProduct[] | 
 
 export const getFilters = async (): Promise<IFilters | null> => {
   try {
-    const response = await apiClient.get('/filters');
+    const response = await apiClient.get("/filters");
     return response.data;
   } catch (e) {
     console.error("Error fetching filters:", e);
     return null;
   }
-}
+};

@@ -1,12 +1,8 @@
 import "./App.css";
-import FiltersPanel from "./components/FiltersPanel/FiltersPanel";
+import ProductsPage from "./components/ProductsPage/ProductsPage";
 
 function App() {
-  return (
-    <>
-      <FiltersPanel />
-    </>
-  );
+  return <ProductsPage />;
 }
 
 export default App;

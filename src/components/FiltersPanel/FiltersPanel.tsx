@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { getFilters, type IFilters } from "../../api/productsApi";
+import { type IFilters } from "../../api/productsApi";
 import "./FiltersPanel.scss";
 import SlidersIcon from "../../assets/icons/SlidersIcon";
 import RotateIcon from "../../assets/icons/RotateIcon";
 import CustomCheckbox from "../CustomCheckbox/CustomCheckbox";
 import CustomSlider from "../CustomSlider/CustomSlider";
 
-interface IActiveFilters {
+export interface IActiveFilters {
   categories: string[];
   brands: string[];
   minPrice: number | null;
@@ -15,25 +15,27 @@ interface IActiveFilters {
   maxRating: number | null;
 }
 
-const FiltersPanel: React.FC = () => {
-  const [filters, setFilters] = useState<IFilters>({});
-  const [isLoading, setIsLoading] = useState(true);
+interface FiltersPanelProps {
+  filters: IFilters;
+  activeFilters: IActiveFilters;
+  setActiveFilters: React.Dispatch<React.SetStateAction<IActiveFilters>>;
+  isLoading: boolean;
+  className?: string;
+}
 
+const FiltersPanel: React.FC<FiltersPanelProps> = ({
+  filters,
+  activeFilters,
+  setActiveFilters,
+  isLoading,
+  className,
+}) => {
   const [localPriceRange, setLocalPriceRange] = useState<[number, number]>([
     0, 1000,
   ]);
   const [localRatingRange, setLocalRatingRange] = useState<[number, number]>([
     0, 5,
   ]);
-
-  const [activeFilters, setActiveFilters] = useState<IActiveFilters>({
-    categories: [],
-    brands: [],
-    minPrice: null,
-    maxPrice: null,
-    minRating: null,
-    maxRating: null,
-  });
 
   const hasActiveFilters =
     activeFilters.categories.length > 0 ||
@@ -42,15 +44,6 @@ const FiltersPanel: React.FC = () => {
     activeFilters.maxPrice !== null ||
     activeFilters.minRating !== null ||
     activeFilters.maxRating !== null;
-
-  useEffect(() => {
-    const fetchFilters = async () => {
-      const res = await getFilters();
-      if (res) setFilters(res);
-      setIsLoading(false);
-    };
-    fetchFilters();
-  }, []);
 
   useEffect(() => {
     const changeRanges = async () => {
@@ -151,7 +144,7 @@ const FiltersPanel: React.FC = () => {
       ))}
     </div>
   ) : (
-    <div className="filters-panel">
+    <div className={`filters-panel ${className || ""}`}>
       <div className="filters-panel__header">
         <div className="filters-panel__title-wrapper">
           <SlidersIcon width={20} height={20} color="#1b988d" />

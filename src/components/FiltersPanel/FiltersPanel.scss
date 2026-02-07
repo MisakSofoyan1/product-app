@@ -1,3 +1,5 @@
+@use "../../styles/variables.scss" as v;
+
 .filters-panel {
   padding: 1.5rem;
   display: flex;
@@ -9,6 +11,10 @@
   background: #ffffff;
   position: sticky;
   top: 6rem;
+
+  @media (max-width: v.$bp-tablet) {
+    width: auto;
+  }
 
   &__header {
     display: flex;

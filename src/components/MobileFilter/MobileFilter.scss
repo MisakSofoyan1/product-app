@@ -1,0 +1,125 @@
+@use '../../styles/variables.scss' as v;
+
+.filter-drawer__trigger-wrapper {
+  display: none;
+
+  @media (max-width: v.$bp-tablet) {
+      display: block;
+  }
+}
+
+.filter-drawer__trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background: white;
+  border: 1px solid #dae0e7;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #131720;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-drawer__trigger:hover {
+  border-color: #1b988d;
+  background: #f2fdfc;
+}
+
+.filter-drawer__count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 25px;
+  width: 25px;
+  background-color: #1b988d;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 50%;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.filter-drawer__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #00000080;
+  z-index: 50;
+  display: flex;
+  animation: fadeIn 0.2s ease;
+  height: 100vh;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+
+.filter-drawer__panel {
+  width: 300px;
+  max-width: 85vw;
+  background: white;
+  box-shadow: 4px 0 20px #00000026;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease;
+  z-index: 51;
+  height: 100%;
+}
+
+.filter-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #dae0e7;
+}
+
+.filter-drawer__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #131720;
+  margin: 0;
+}
+
+.filter-drawer__close {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: #6c7c93;
+  cursor: pointer;
+}
+
+.filter-drawer__close:hover {
+  background: hsl(210, 15%, 95%);
+  color: hsl(220, 25%, 10%);
+}
+
+.filter-drawer__content {
+  flex: 1;
+  overflow-y: auto;
+  border-radius: 0;
+}
